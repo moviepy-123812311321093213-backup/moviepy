@@ -7,7 +7,9 @@ import numpy as np
 from moviepy.audio.AudioClip import CompositeAudioClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 from moviepy.video.VideoClip import ColorClip, VideoClip
-
+from moviepy.video.io.VideoFileClip import VideoFileClip
+import datetime
+import gc
 
 def concatenate_videoclips(
     clips, method="chain", transition=None, bg_color=None, is_mask=False, padding=0
@@ -120,3 +122,24 @@ def concatenate_videoclips(
     fpss = [clip.fps for clip in clips if getattr(clip, "fps", None) is not None]
     result.fps = max(fpss) if fpss else None
     return result
+
+def text2video(prompts, output_dir_path):
+    import torch, random, gc
+    from modelscope.pipelines import pipeline
+    from modelscope.outputs import OutputKeys
+
+    torch.manual_seed(random.randint(0, 2147483647))
+    pipe = pipeline('text-to-video-synthesis', '/content/drive/MyDrive/BEProject/models')
+
+    video_clips = []
+
+    for prompt in prompts:
+      with torch.no_grad(): torch.cuda.empty_cache()
+      gc.collect()
+      output_video_path = pipe({'text': prompt})[OutputKeys.OUTPUT_VIDEO]
+      video_clip = VideoFileClip(output_video_path)
+      video_clips.append(video_clip)
+
+    final = concatenate_videoclips(video_clips)
+    new_video_path = f'/content/videos/{datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}.mp4'
+    final.write_videofile(new_video_path, codec="libx264")

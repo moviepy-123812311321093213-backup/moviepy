@@ -21,7 +21,7 @@ from moviepy.version import __version__
 from moviepy.video import fx as vfx, tools as videotools
 from moviepy.video.compositing import transitions as transfx
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip, clips_array
-from moviepy.video.compositing.concatenate import concatenate_videoclips
+from moviepy.video.compositing.concatenate import concatenate_videoclips, text2video
 from moviepy.video.io import ffmpeg_tools
 from moviepy.video.io.downloader import download_webfile
 from moviepy.video.io.ImageSequenceClip import ImageSequenceClip
@@ -83,6 +83,7 @@ __all__ = [
     "clips_array",
     "ImageSequenceClip",
     "concatenate_videoclips",
+    "text2video",
     "download_webfile",
     "AudioClip",
     "CompositeAudioClip",
