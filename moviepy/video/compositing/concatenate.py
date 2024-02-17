@@ -123,7 +123,7 @@ def concatenate_videoclips(
     result.fps = max(fpss) if fpss else None
     return result
 
-def text2video(prompts, output_dir_path):
+def text2video(prompts, output_dir_path, output_file_name):
     import torch, random, gc
     from modelscope.pipelines import pipeline
     from modelscope.outputs import OutputKeys
@@ -141,5 +141,5 @@ def text2video(prompts, output_dir_path):
       video_clips.append(video_clip)
 
     final = concatenate_videoclips(video_clips)
-    new_video_path = f'/content/videos/{datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}.mp4'
+    new_video_path = f'{output_dir_path}/{output_file_name}.mp4'
     final.write_videofile(new_video_path, codec="libx264")
