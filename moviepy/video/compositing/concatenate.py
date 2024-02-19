@@ -123,13 +123,15 @@ def concatenate_videoclips(
     result.fps = max(fpss) if fpss else None
     return result
 
+pipe = None
+
 def text2video(prompts, output_dir_path, output_file_name):
     import torch, random, gc
     from modelscope.pipelines import pipeline
     from modelscope.outputs import OutputKeys
 
     torch.manual_seed(random.randint(0, 2147483647))
-    pipe = pipeline('text-to-video-synthesis', '/content/drive/MyDrive/BEProject/models')
+    if pipe is None: pipe = pipeline('text-to-video-synthesis', '/content/drive/MyDrive/BEProject/models')
 
     video_clips = []
 
